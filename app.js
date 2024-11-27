@@ -1,4 +1,5 @@
 const express = require('express');
+const {createServer} = require('@vercel/node');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 // const userRoutes = require('./routes/userRoutes');
@@ -23,8 +24,15 @@ app.use('/clothing', clothingRoutes);
 // app.use('/reviews', reviewRoutes);
 // Error handling middleware
 // app.use(errorMiddleware);
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-module.exports = app;
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = createServer(app);
 
-app.get('/', (req, res) => { res.send('Hello World!'); });
+// app.get('/', (req, res) => { res.send('Hello World!'); });
+
+// if (process.env.NODE_ENV !== 'production') {
+//     const PORT = 3000;
+//     app.listen(PORT, () => {
+//       console.log(`Server running locally on http://localhost:${PORT}`);
+//     });
+//   } 
