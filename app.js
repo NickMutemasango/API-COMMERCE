@@ -24,8 +24,8 @@ app.use('/clothing', clothingRoutes);
 // app.use('/reviews', reviewRoutes);
 // Error handling middleware
 // app.use(errorMiddleware);
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 module.exports = createServer(app);
 
 // app.get('/', (req, res) => { res.send('Hello World!'); });
