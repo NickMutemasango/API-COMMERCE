@@ -1,38 +1,40 @@
 const express = require('express');
-const {createServer} = require('@vercel/node');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-// const userRoutes = require('./routes/userRoutes');
 const clothingRoutes = require('./routes/clothingRoutes');
-// const bookingRoutes = require('./routes/bookingRoutes');
-// const paymentRoutes = require('./routes/paymentRoutes');
-// const reviewRoutes = require('./routes/reviewRoutes');
-// const errorMiddleware = require('./middlewares/errorMiddleware');
+
 dotenv.config();
+
 const app = express();
-// Database connection
-mongoose.connect('mongodb+srv://onlinecommerce:onlinecommerce@commerce.rmewx.mongodb.net/?retryWrites=true&w=majority&appName=Commerce',{ useNewUrlParser: true,
-useUnifiedTopology: true })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+
+// Middleware
 app.use(express.json());
-// Define routes
-// app.use('/users', userRoutes);
+
+// MongoDB Connection
+mongoose
+  .connect(
+    'mongodb+srv://onlinecommerce:onlinecommerce@commerce.rmewx.mongodb.net/?retryWrites=true&w=majority&appName=Commerce', // Your MongoDB URI
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
+
+// Routes
 app.use('/clothing', clothingRoutes);
-// app.use('/bookings', bookingRoutes);
-// app.use('/payments', paymentRoutes);
-// app.use('/reviews', reviewRoutes);
-// Error handling middleware
-// app.use(errorMiddleware);
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-module.exports = createServer(app);
 
-// app.get('/', (req, res) => { res.send('Hello World!'); });
+app.use((req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); //allowing our api to run on any browser
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT,PATCH, DELETE'); //allowing anyone to use HTTP methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); //allowing only content-type and authorization headers
+})
 
-// if (process.env.NODE_ENV !== 'production') {
-//     const PORT = 3000;
-//     app.listen(PORT, () => {
-//       console.log(`Server running locally on http://localhost:${PORT}`);
-//     });
-//   } 
+// Default route for testing
+app.get('/', (req, res) => {
+  res.send('API is working!');
+});
+
+// Export the app for Vercel
+module.exports = app;
